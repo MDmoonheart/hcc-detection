@@ -84,7 +84,7 @@ class Unet(tf.keras.Model):
     
     def __init__(self):
         super().__init__()
-        self.conv1_1 = Conv2D(32, (3, 3), activation='relu', padding='same')
+        self.conv1_1 = Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=(256,256,1))
         self.conv1_2 = Conv2D(32, (3, 3), activation='relu', padding='same')
         self.pool1 = MaxPooling2D(pool_size=(2, 2))
 
@@ -120,8 +120,6 @@ class Unet(tf.keras.Model):
         self.conv9_2 = Conv2D(32, (3, 3), activation='relu', padding='same')
 
         self.conv10 = Conv2D(1, (1, 1), activation='sigmoid')
-
-
 
     def call(self, input):
         x1 = self.conv1_1(input)

@@ -1,4 +1,7 @@
 2022-11-25
 Lu Jiqiao, George
-set up develop env and re-construct unet using keras.model subclass
+set up develop env and re-construct unet using keras.model subclass.
 
+2022-11-28
+Lu Jiqiao, George
+specify the input of first convolution layer so that the model can accept image with 1 channel.
