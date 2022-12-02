@@ -84,42 +84,42 @@ class Unet(tf.keras.Model):
     
     def __init__(self):
         super().__init__()
-        self.conv1_1 = Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=(256,256,1))
-        self.conv1_2 = Conv2D(32, (3, 3), activation='relu', padding='same')
-        self.pool1 = MaxPooling2D(pool_size=(2, 2))
+        self.conv1_1 = Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=(None, 256, 256, 1), name='conv1_1')
+        self.conv1_2 = Conv2D(32, (3, 3), activation='relu', padding='same', name='conv1_2')
+        self.pool1 = MaxPooling2D(pool_size=(2, 2), name='pool1')
 
-        self.conv2_1 = Conv2D(64, (3, 3), activation='relu', padding='same')
-        self.conv2_2 = Conv2D(64, (3, 3), activation='relu', padding='same')
-        self.pool2 = MaxPooling2D(pool_size=(2, 2))
+        self.conv2_1 = Conv2D(64, (3, 3), activation='relu', padding='same', name='conv2_1')
+        self.conv2_2 = Conv2D(64, (3, 3), activation='relu', padding='same', name='conv2_2')
+        self.pool2 = MaxPooling2D(pool_size=(2, 2), name='pool2')
 
-        self.conv3_1 = Conv2D(128, (3, 3), activation='relu', padding='same')
-        self.conv3_2 = Conv2D(128, (3, 3), activation='relu', padding='same')
-        self.pool3 = MaxPooling2D(pool_size=(2, 2))
+        self.conv3_1 = Conv2D(128, (3, 3), activation='relu', padding='same', name='conv3_1')
+        self.conv3_2 = Conv2D(128, (3, 3), activation='relu', padding='same', name='conv3_2')
+        self.pool3 = MaxPooling2D(pool_size=(2, 2), name='conv1_1')
 
-        self.conv4_1 = Conv2D(256, (3, 3), activation='relu', padding='same')
-        self.conv4_2 = Conv2D(256, (3, 3), activation='relu', padding='same')
-        self.pool4 = MaxPooling2D(pool_size=(2, 2))
+        self.conv4_1 = Conv2D(256, (3, 3), activation='relu', padding='same', name='conv4_1')
+        self.conv4_2 = Conv2D(256, (3, 3), activation='relu', padding='same', name='conv4_2')
+        self.pool4 = MaxPooling2D(pool_size=(2, 2), name='pool4')
 
-        self.conv5_1 = Conv2D(512, (3, 3), activation='relu', padding='same')
-        self.conv5_2 = Conv2D(512, (3, 3), activation='relu', padding='same')
+        self.conv5_1 = Conv2D(512, (3, 3), activation='relu', padding='same', name='conv5_1')
+        self.conv5_2 = Conv2D(512, (3, 3), activation='relu', padding='same', name='conv5_2')
 
-        self.conv2DT6 = Conv2DTranspose(256, (2, 2), strides=(2, 2), padding='same')
-        self.conv6_1 = Conv2D(256, (3, 3), activation='relu', padding='same')
-        self.conv6_2 = Conv2D(256, (3, 3), activation='relu', padding='same')
+        self.conv2DT6 = Conv2DTranspose(256, (2, 2), strides=(2, 2), padding='same', name='conv2DT6')
+        self.conv6_1 = Conv2D(256, (3, 3), activation='relu', padding='same', name='conv6_1')
+        self.conv6_2 = Conv2D(256, (3, 3), activation='relu', padding='same', name='conv6_2')
         
-        self.conv2DT7 = Conv2DTranspose(128, (2, 2), strides=(2, 2), padding='same')
-        self.conv7_1 = Conv2D(128, (3, 3), activation='relu', padding='same')
-        self.conv7_2 = Conv2D(128, (3, 3), activation='relu', padding='same')
+        self.conv2DT7 = Conv2DTranspose(128, (2, 2), strides=(2, 2), padding='same', name='conv2DT7')
+        self.conv7_1 = Conv2D(128, (3, 3), activation='relu', padding='same', name='conv7_1')
+        self.conv7_2 = Conv2D(128, (3, 3), activation='relu', padding='same', name='conv7_2')
 
-        self.conv2DT8 = Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same')
-        self.conv8_1 = Conv2D(64, (3, 3), activation='relu', padding='same')
-        self.conv8_2 = Conv2D(64, (3, 3), activation='relu', padding='same')
+        self.conv2DT8 = Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same', name='conv2DT8')
+        self.conv8_1 = Conv2D(64, (3, 3), activation='relu', padding='same', name='conv8_1')
+        self.conv8_2 = Conv2D(64, (3, 3), activation='relu', padding='same', name='conv8_2')
 
-        self.conv2DT9 = Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')
-        self.conv9_1 = Conv2D(32, (3, 3), activation='relu', padding='same')
-        self.conv9_2 = Conv2D(32, (3, 3), activation='relu', padding='same')
+        self.conv2DT9 = Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same', name='conv2DT9')
+        self.conv9_1 = Conv2D(32, (3, 3), activation='relu', padding='same', name='conv9_1')
+        self.conv9_2 = Conv2D(32, (3, 3), activation='relu', padding='same', name='conv9_2')
 
-        self.conv10 = Conv2D(1, (1, 1), activation='sigmoid')
+        self.conv10 = Conv2D(1, (1, 1), activation='sigmoid', name='conv10')
 
     def call(self, input):
         x1 = self.conv1_1(input)
