@@ -53,7 +53,7 @@ def create_dataset(img_dir: str, msk_dir: str, model: str):
         ds = unet_factorize(X, Y)
     else:
         pass
-    training_set, test_set, val_set = split(ds)
+    training_set, test_set, val_set = preprocess(ds)
     return training_set, test_set, val_set
     
 def __init_conn(config_path='./config.json'):
@@ -216,9 +216,9 @@ def void_filter(imgs: np.ndarray, masks: np.ndarray):
     imgs_filtered = imgs[y_msk, :, :]
     return imgs_filtered, masks_filtered
 
-def split(ds:tf.data.Dataset, training_size=0.8, test_size=0.1):
+def preprocess(ds:tf.data.Dataset, training_size=0.8, test_size=0.1):
     '''
-    split dataset into training sets, test sets, validation sets as specified portion.
+    preprocess and split dataset into training sets, test sets, validation sets as specified portion.
 
     Args:
         ds: tf.dataset with X and Y.
@@ -232,10 +232,18 @@ def split(ds:tf.data.Dataset, training_size=0.8, test_size=0.1):
     TRAINING_SIZE = int(training_size * DATASIZE)
     TEST_SIZE = int(test_size * DATASIZE)
     VALIDATION_SIZE = DATASIZE - TRAINING_SIZE - TEST_SIZE
-    ds_shuffle = ds.shuffle(buffer_size=100)
-    train_set = ds_shuffle.take(TRAINING_SIZE)
-    test_set = ds_shuffle.skip(TRAINING_SIZE).take(TEST_SIZE)
-    val_set = ds_shuffle.skip(TRAINING_SIZE + TEST_SIZE)
+
+    def parse_function(image, label):
+        image = tf.image.convert_image_dtype(image, tf.float16)
+        label = tf.image.convert_image_dtype(label, tf.float16)
+        return image, label
+
+    # implement operation shuffle, cast, batch, prefetch
+    ds = ds.shuffle(buffer_size=DATASIZE)
+    ds = ds.map(parse_function, num_parallel_calls=2)
+    train_set = ds.take(TRAINING_SIZE)
+    test_set = ds.skip(TRAINING_SIZE).take(TEST_SIZE)
+    val_set = ds.skip(TRAINING_SIZE + TEST_SIZE)
     print(f"training size: {train_set.cardinality().numpy()}, test size: {test_set.cardinality().numpy()},\
     validation size: {val_set.cardinality().numpy()}")
     return train_set, test_set, val_set
@@ -245,3 +253,4 @@ def unet_factorize(X: np.ndarray, Y: np.ndarray) -> tf.data.Dataset:
     factorize the X, Y into tf.data.Dataset with requeired channel dimensions
     '''
     return tf.data.Dataset.from_tensor_slices((X[..., np.newaxis], Y[..., np.newaxis])).batch(2)
+

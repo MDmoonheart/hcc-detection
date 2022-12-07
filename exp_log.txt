@@ -5,3 +5,25 @@ set up develop env and re-construct unet using keras.model subclass.
 2022-11-28
 Lu Jiqiao, George
 specify the input of first convolution layer so that the model can accept image with 1 channel.
+
+2022-11-30
+Lu Jiqiao, George
+filter the void mask and corresponding images(all pixel value is zero). Since, we only have roughly 2000 
+filtred images with label, we might need to do some augmentation on these images.
+
+2022-12-1
+Lu Jiqiao, George
+create data pipeline and factorize it into tf.dataset, then split it into training sets, validation set and test sets.
+
+2022-12-2
+Lu Jiqiao, George
+Finish building the pipeline and start training model. model training fails because of the excess of memory. 
+Reducing the batch size will solve the problem but still cannot start the first epoch on windows 10 server with 
+no GPU. Planing to train the model on the other machine or rebuild datset by copying the target files into the 
+working directory.
+
+2022-12-7
+Lu Jiqiao, George
+The trainig process cannot start becasue of the limit of CPU even I convert data type from float64 to float 16, I decide to split the data
+generation process from from the training process. I will first read the dicom data and transfer it into a data directory for build 
+tensorflow datasets. The processsing of the images is totally invisible to outsiders.
